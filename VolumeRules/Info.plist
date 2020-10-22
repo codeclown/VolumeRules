@@ -23,12 +23,14 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2020 Codeclown. All rights reserved.</string>
+	<string>Copyright © 2020 Martti Laine. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticTermination</key>
+	<true/>
+	<key>LSUIElement</key>
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
