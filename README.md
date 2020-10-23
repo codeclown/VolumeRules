@@ -1,4 +1,4 @@
-#  VolumeRules
+# VolumeRules
 
 Does it annoy you if you open your Mac and have forgotten to mute the volume after you last used it?
 
@@ -14,7 +14,9 @@ Screenshot of Preferences:
 
 ## Download
 
-[**Download v0.1**](https://github.com/codeclown/VolumeRules/releases/download/v0.1/VolumeRules.app.zip) (344 KB)
+~~[**Download v0.1**](https://github.com/codeclown/VolumeRules/releases/download/v0.1/VolumeRules.app.zip) (344 KB)~~
+
+I can't seem to export an .app that could be downloaded and opened by anyone. In the meantime, feel free to open this project in Xcode and build yourself.
 
 Tested only on Catalina.
 
@@ -31,11 +33,9 @@ The output you see in Console.app should provide some more information as to wha
 
 If you've encountered a bug, please file an issue.
 
-
 ## Contributing
 
 Contributions very welcome.
-
 
 ## License
 
