@@ -9,7 +9,7 @@
 import Foundation
 
 func userDefaultsKey(_ eventName: EventName, _ audioDeviceId: String) -> String {
-    return "\(eventName)::\(audioDeviceId)"
+    return "rule::\(eventName)::\(audioDeviceId)"
 }
 
 func getSetting(_ eventName: EventName, _ audioDeviceId: String) -> Float32? {
