@@ -3,20 +3,44 @@
 //  VolumeRules
 //
 //  Created by Martti on 21.10.2020.
-//  Copyright © 2020 Codeclown. All rights reserved.
+//  Copyright © 2020 Martti Laine. All rights reserved.
 //
 
 import Cocoa
 import SwiftUI
 
+enum EventName: CaseIterable {
+    case goingToSleep
+    case awakingFromSleep
+}
+
+func userDefaultsKey(_ eventName: EventName, _ audioDeviceId: String) -> String {
+    return "\(eventName)::\(audioDeviceId)"
+}
+
+func getSetting(_ eventName: EventName, _ audioDeviceId: String) -> Float32? {
+    let key = userDefaultsKey(eventName, audioDeviceId)
+    if UserDefaults.standard.object(forKey: key) == nil {
+        return nil
+    }
+    return UserDefaults.standard.float(forKey: key)
+}
+
+func setSetting(_ eventName: EventName, _ audioDeviceId: String, _ value: Float32?) {
+    let key = userDefaultsKey(eventName, audioDeviceId)
+    if value == nil {
+        NSLog("[setSetting] Removing value \(key)")
+        return UserDefaults.standard.removeObject(forKey: key)
+    } else {
+        NSLog("[setSetting] Setting value \(key) to \(value!)")
+        return UserDefaults.standard.set(value!, forKey: key)
+    }
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var preferences = UserPreferences()
-
     var statusBarItem: NSStatusItem!
     var preferencesWindow: NSWindow!
-    
-    var volumeControls = VolumeControls()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         setupUi();
@@ -58,8 +82,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Listeners
     
     func setupListeners() {
-        volumeControls.initForDefaultAudioDevice();
-        
         let workspace = NSWorkspace.shared
         workspace.notificationCenter.addObserver(self, selector: #selector(goingToSleep), name: NSWorkspace.willSleepNotification, object: nil)
         workspace.notificationCenter.addObserver(self, selector: #selector(awakingFromSleep), name: NSWorkspace.didWakeNotification, object: nil)
@@ -70,23 +92,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func goingToSleep() {
-        NSLog("[goingToSleep] Triggered")
-        if !preferences.goingToSleepEnabled {
-            NSLog("[goingToSleep] Not enabled, aborting.")
-            return
-        }
-        NSLog("[goingToSleep] Setting volume to \(preferences.goingToSleepLevel)")
-        volumeControls.setVolume(value: preferences.goingToSleepLevel);
+//        NSLog("[goingToSleep] Triggered")
+//        if !preferences.goingToSleepEnabled {
+//            NSLog("[goingToSleep] Not enabled, aborting.")
+//            return
+//        }
+//        NSLog("[goingToSleep] Setting volume to \(preferences.goingToSleepLevel)")
+//        volumeControls.setVolume(value: preferences.goingToSleepLevel);
     }
     
     @objc func awakingFromSleep() {
-        NSLog("[awakingFromSleep] Triggered")
-        if !preferences.awakingFromSleepEnabled {
-            NSLog("[awakingFromSleep] Not enabled, aborting.")
-            return
-        }
-        NSLog("[awakingFromSleep] Setting volume to \(preferences.awakingFromSleepLevel)")
-        volumeControls.setVolume(value: preferences.awakingFromSleepLevel);
+//        NSLog("[awakingFromSleep] Triggered")
+//        if !preferences.awakingFromSleepEnabled {
+//            NSLog("[awakingFromSleep] Not enabled, aborting.")
+//            return
+//        }
+//        NSLog("[awakingFromSleep] Setting volume to \(preferences.awakingFromSleepLevel)")
+//        volumeControls.setVolume(value: preferences.awakingFromSleepLevel);
     }
 }
 

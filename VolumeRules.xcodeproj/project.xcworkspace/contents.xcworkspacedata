@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:VolumeRules.xcodeproj">
+      location = "group:/Users/martti/w/git/VolumeRules/VolumeRules/Main.storyboard">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

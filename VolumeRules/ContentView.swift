@@ -3,28 +3,76 @@
 //  VolumeRules
 //
 //  Created by Martti on 21.10.2020.
-//  Copyright © 2020 Codeclown. All rights reserved.
+//  Copyright © 2020 Martti Laine. All rights reserved.
 //
 
 import SwiftUI
 
-struct ContentView: View {
-    @ObservedObject var preferences = UserPreferences()
+let eventLabels: Dictionary<EventName, String> = [
+    EventName.goingToSleep: "When Mac goes to sleep, set volume to…",
+    EventName.awakingFromSleep: "When Mac awakes from sleep, set volume to…"
+]
+
+struct EventFoobar: View {
+    var eventName: EventName
+    var audioDeviceId: String
+    @State var currentValue: Float32?
     
     var body: some View {
         VStack(alignment: .leading) {
-            Toggle(isOn: $preferences.goingToSleepEnabled) {
-                Text("When Mac goes to sleep, set volume to…")
-            }
-            Slider(value: $preferences.goingToSleepLevel, in: 0...1, step: 0.1)
             Divider()
-            Toggle(isOn: $preferences.awakingFromSleepEnabled) {
-                Text("When Mac awakes from sleep, set volume to…")
+            Toggle(
+                isOn: Binding<Bool>(
+                    get: {
+                        return currentValue != nil
+                    },
+                    set: {
+                        let value = $0 ? Float32(0.5) : nil
+                        setSetting(eventName, audioDeviceId, value)
+                        currentValue = value
+                    }
+                )
+            ) {
+                Text(eventLabels[eventName] ?? String(describing: eventName))
             }
-            Slider(value: $preferences.awakingFromSleepLevel, in: 0...1, step: 0.1)
-//            "Why so many options? Keep in mind that Mac remembers volume per-device. For example, if you set a specific volume when the Mac goes to sleep and is connected to e.g. a Bluetooth speaker, and then disconnects from that speaker before waking up, the wake-up device will be different and the volume."
-//            "Note that volume is device-specific. So, if you set a rule for when Mac goes to sleep, and your output device disconnects before it awakes, that rule changed the volume of the previous device but not the new one."
-//            "Note that volume is device-specific. Meaning, it gets applied to whichever output device is active when the rule is activated. If you Mac switches to another output device afterwards, volume will reset to whichever is set for that device."
+            Slider(
+                value: Binding<Float32>(
+                    get: {
+                        return currentValue ?? 0.0
+                    },
+                    set: {
+                        let value = $0
+                        setSetting(eventName, audioDeviceId, value)
+                        currentValue = value
+                    }
+                ),
+                in: 0...1, step: 0.1
+            )
+            .disabled(currentValue == nil)
+        }
+    }
+}
+
+struct ContentView: View {
+    var audioDevices = AudioDeviceHelper.listDevices()
+    @State private var selectedAudioDeviceId = ""
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Picker("Audio device:", selection: $selectedAudioDeviceId) {
+                ForEach(audioDevices) { audioDevice in
+                    Text("\(audioDevice.name) (\(audioDevice.id)").tag(audioDevice.id)
+                }
+            }
+            if selectedAudioDeviceId != "" {
+                ForEach(EventName.allCases, id: \.self) { eventName in
+                    EventFoobar(
+                        eventName: eventName,
+                        audioDeviceId: selectedAudioDeviceId,
+                        currentValue: getSetting(eventName, selectedAudioDeviceId)
+                    )
+                }
+            }
         }
         .padding()
     }

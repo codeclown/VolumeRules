@@ -3,7 +3,7 @@
 //  VolumeRules
 //
 //  Created by Martti on 21.10.2020.
-//  Copyright © 2020 Codeclown. All rights reserved.
+//  Copyright © 2020 Martti Laine. All rights reserved.
 //
 
 import Foundation
@@ -13,22 +13,6 @@ import AudioToolbox
 class VolumeControls {
     var outputDeviceId = AudioDeviceID(0);
     
-    func initForDefaultAudioDevice() {
-        var idSize = UInt32(MemoryLayout.size(ofValue: outputDeviceId))
-        var getDefaultOutputDevicePropertyAddress = AudioObjectPropertyAddress(
-            mSelector: kAudioHardwarePropertyDefaultOutputDevice,
-            mScope: kAudioObjectPropertyScopeGlobal,
-            mElement: AudioObjectPropertyElement(kAudioObjectPropertyElementMaster)
-        )
-        let _ = AudioObjectGetPropertyData(
-            AudioObjectID(kAudioObjectSystemObject),
-            &getDefaultOutputDevicePropertyAddress,
-            0,
-            nil,
-            &idSize,
-            &outputDeviceId
-        )
-    }
     
     func isBuiltInOutput() -> Bool {
         var getDeviceName = AudioObjectPropertyAddress(
@@ -51,23 +35,5 @@ class VolumeControls {
         }
         let nameString: NSString = name!;
         return nameString == "Built-in Output";
-    }
-    
-    func setVolume(value: Float32) {
-        var volume = Float32(value)
-        let volumeSize = UInt32(MemoryLayout.size(ofValue: volume))
-        var volumePropertyAddress = AudioObjectPropertyAddress(
-            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMasterVolume,
-            mScope: kAudioDevicePropertyScopeOutput,
-            mElement: kAudioObjectPropertyElementMaster
-        )
-        let _ = AudioObjectSetPropertyData(
-            outputDeviceId,
-            &volumePropertyAddress,
-            0,
-            nil,
-            volumeSize,
-            &volume
-        )
     }
 }
