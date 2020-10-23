@@ -3,7 +3,7 @@
 //  VolumeRulesTests
 //
 //  Created by Martti on 21.10.2020.
-//  Copyright © 2020 Codeclown. All rights reserved.
+//  Copyright © 2020 Martti Laine. All rights reserved.
 //
 
 import XCTest
