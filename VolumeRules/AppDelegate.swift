@@ -9,34 +9,6 @@
 import Cocoa
 import SwiftUI
 
-enum EventName: CaseIterable {
-    case goingToSleep
-    case awakingFromSleep
-}
-
-func userDefaultsKey(_ eventName: EventName, _ audioDeviceId: String) -> String {
-    return "\(eventName)::\(audioDeviceId)"
-}
-
-func getSetting(_ eventName: EventName, _ audioDeviceId: String) -> Float32? {
-    let key = userDefaultsKey(eventName, audioDeviceId)
-    if UserDefaults.standard.object(forKey: key) == nil {
-        return nil
-    }
-    return UserDefaults.standard.float(forKey: key)
-}
-
-func setSetting(_ eventName: EventName, _ audioDeviceId: String, _ value: Float32?) {
-    let key = userDefaultsKey(eventName, audioDeviceId)
-    if value == nil {
-        NSLog("[setSetting] Removing value \(key)")
-        return UserDefaults.standard.removeObject(forKey: key)
-    } else {
-        NSLog("[setSetting] Setting value \(key) to \(value!)")
-        return UserDefaults.standard.set(value!, forKey: key)
-    }
-}
-
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusBarItem: NSStatusItem!
@@ -83,32 +55,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func setupListeners() {
         let workspace = NSWorkspace.shared
-        workspace.notificationCenter.addObserver(self, selector: #selector(goingToSleep), name: NSWorkspace.willSleepNotification, object: nil)
-        workspace.notificationCenter.addObserver(self, selector: #selector(awakingFromSleep), name: NSWorkspace.didWakeNotification, object: nil)
+        workspace.notificationCenter.addObserver(
+            self,
+            selector: #selector(goingToSleep),
+            name: NSWorkspace.willSleepNotification,
+            object: nil
+        )
+        workspace.notificationCenter.addObserver(
+            self,
+            selector: #selector(awakingFromSleep),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
 
-//        let center = DistributedNotificationCenter.default()
-//        center.addObserver(self, selector: #selector(screenIsLocked), name: NSNotification.Name(rawValue: "com.apple.screenIsLocked"), object: nil)
-//        center.addObserver(self, selector: #selector(screenIsUnlocked), name: NSNotification.Name(rawValue: "com.apple.screenIsUnlocked"), object: nil)
+        let center = DistributedNotificationCenter.default()
+        center.addObserver(
+            self,
+            selector: #selector(screenIsLocked),
+            name: NSNotification.Name(rawValue: "com.apple.screenIsLocked"),
+            object: nil
+        )
+        center.addObserver(
+            self,
+            selector: #selector(screenIsUnlocked),
+            name: NSNotification.Name(rawValue: "com.apple.screenIsUnlocked"),
+            object: nil
+        )
+    }
+    
+    func eventHandler(_ eventName: EventName) {
+        NSLog("[\(eventName)] --- Triggered ---")
+        let activeOutputDeviceId = AudioDeviceHelper.getActiveDeviceId()
+        NSLog("[\(eventName)] activeOutputDeviceId=\(activeOutputDeviceId)")
+        let activeOutputDeviceUid = AudioDeviceHelper.getDeviceUid(activeOutputDeviceId)
+        NSLog("[\(eventName)] activeOutputDeviceUid=\(activeOutputDeviceUid)")
+        let setting = getSetting(eventName, activeOutputDeviceUid)
+        NSLog("[\(eventName)] setting=\(String(describing: setting))")
+        if setting != nil {
+            NSLog("[\(eventName)] Setting volume to \(setting!)")
+            AudioDeviceHelper.setDeviceVolume(activeOutputDeviceId, setting!)
+        } else {
+            NSLog("[\(eventName)] Not setting volume")
+        }
+        NSLog("[\(eventName)] --- End ---")
     }
     
     @objc func goingToSleep() {
-//        NSLog("[goingToSleep] Triggered")
-//        if !preferences.goingToSleepEnabled {
-//            NSLog("[goingToSleep] Not enabled, aborting.")
-//            return
-//        }
-//        NSLog("[goingToSleep] Setting volume to \(preferences.goingToSleepLevel)")
-//        volumeControls.setVolume(value: preferences.goingToSleepLevel);
+        eventHandler(EventName.goingToSleep)
     }
     
     @objc func awakingFromSleep() {
-//        NSLog("[awakingFromSleep] Triggered")
-//        if !preferences.awakingFromSleepEnabled {
-//            NSLog("[awakingFromSleep] Not enabled, aborting.")
-//            return
-//        }
-//        NSLog("[awakingFromSleep] Setting volume to \(preferences.awakingFromSleepLevel)")
-//        volumeControls.setVolume(value: preferences.awakingFromSleepLevel);
+        eventHandler(EventName.awakingFromSleep)
+    }
+    
+    @objc func screenIsLocked() {
+        eventHandler(EventName.lockingScreen)
+    }
+    
+    @objc func screenIsUnlocked() {
+        eventHandler(EventName.unlockingScreen)
     }
 }
 

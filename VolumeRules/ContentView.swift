@@ -8,13 +8,9 @@
 
 import SwiftUI
 
-let eventLabels: Dictionary<EventName, String> = [
-    EventName.goingToSleep: "When Mac goes to sleep, set volume to…",
-    EventName.awakingFromSleep: "When Mac awakes from sleep, set volume to…"
-]
-
 struct EventFoobar: View {
     var eventName: EventName
+    // TODO fix dropdown not updating the view
     var audioDeviceId: String
     @State var currentValue: Float32?
     

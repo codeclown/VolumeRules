@@ -61,6 +61,10 @@ class AudioDeviceHelper {
             )
             audioDevices.append(audioDevice)
         }
+        audioDevices.append(AudioDevice(
+            id: "test-id",
+            name: "Test Device"
+        ))
         return audioDevices;
     }
     
@@ -108,38 +112,40 @@ class AudioDeviceHelper {
         return name! as String
     }
     
-//    func initForDefaultAudioDevice() {
-//        var idSize = UInt32(MemoryLayout.size(ofValue: outputDeviceId))
-//        var getDefaultOutputDevicePropertyAddress = AudioObjectPropertyAddress(
-//            mSelector: kAudioHardwarePropertyDefaultOutputDevice,
-//            mScope: kAudioObjectPropertyScopeGlobal,
-//            mElement: AudioObjectPropertyElement(kAudioObjectPropertyElementMaster)
-//        )
-//        let _ = AudioObjectGetPropertyData(
-//            AudioObjectID(kAudioObjectSystemObject),
-//            &getDefaultOutputDevicePropertyAddress,
-//            0,
-//            nil,
-//            &idSize,
-//            &outputDeviceId
-//        )
-//    }
+    static func getActiveDeviceId() -> AudioDeviceID {
+        var deviceId = AudioDeviceID(0)
+        var size = UInt32(MemoryLayout.size(ofValue: deviceId))
+        var getDefaultOutputDevicePropertyAddress = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+            mScope: kAudioObjectPropertyScopeGlobal,
+            mElement: AudioObjectPropertyElement(kAudioObjectPropertyElementMaster)
+        )
+        let _ = AudioObjectGetPropertyData(
+            AudioObjectID(kAudioObjectSystemObject),
+            &getDefaultOutputDevicePropertyAddress,
+            0,
+            nil,
+            &size,
+            &deviceId
+        )
+        return deviceId
+    }
     
-//    func setVolume(value: Float32) {
-//        var volume = Float32(value)
-//        let volumeSize = UInt32(MemoryLayout.size(ofValue: volume))
-//        var volumePropertyAddress = AudioObjectPropertyAddress(
-//            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMasterVolume,
-//            mScope: kAudioDevicePropertyScopeOutput,
-//            mElement: kAudioObjectPropertyElementMaster
-//        )
-//        let _ = AudioObjectSetPropertyData(
-//            outputDeviceId,
-//            &volumePropertyAddress,
-//            0,
-//            nil,
-//            volumeSize,
-//            &volume
-//        )
-//    }
+    static func setDeviceVolume(_ audioDeviceId: AudioDeviceID, _ value: Float32) {
+        var volume = Float32(value)
+        let size = UInt32(MemoryLayout.size(ofValue: volume))
+        var volumePropertyAddress = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMasterVolume,
+            mScope: kAudioDevicePropertyScopeOutput,
+            mElement: kAudioObjectPropertyElementMaster
+        )
+        let _ = AudioObjectSetPropertyData(
+            audioDeviceId,
+            &volumePropertyAddress,
+            0,
+            nil,
+            size,
+            &volume
+        )
+    }
 }

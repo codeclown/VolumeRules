@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E0740CB1254217CE00CAB991 /* AudioDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0740CB0254217CE00CAB991 /* AudioDeviceHelper.swift */; };
 		E0740CC32543127100CAB991 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0740CC22543127100CAB991 /* Main.storyboard */; };
+		E0740CC72543133600CAB991 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0740CC62543133600CAB991 /* Config.swift */; };
+		E0740CCF2543160A00CAB991 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0740CCE2543160A00CAB991 /* Settings.swift */; };
 		E0DD2AE72540A08300CF3827 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DD2AE62540A08300CF3827 /* AppDelegate.swift */; };
 		E0DD2AE92540A08300CF3827 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DD2AE82540A08300CF3827 /* ContentView.swift */; };
 		E0DD2AEB2540A08500CF3827 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0DD2AEA2540A08500CF3827 /* Assets.xcassets */; };
@@ -29,6 +31,8 @@
 /* Begin PBXFileReference section */
 		E0740CB0254217CE00CAB991 /* AudioDeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDeviceHelper.swift; sourceTree = "<group>"; };
 		E0740CC22543127100CAB991 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		E0740CC62543133600CAB991 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E0740CCE2543160A00CAB991 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		E0DD2AE32540A08300CF3827 /* VolumeRules.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VolumeRules.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DD2AE62540A08300CF3827 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0DD2AE82540A08300CF3827 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 		E0DD2AE52540A08300CF3827 /* VolumeRules */ = {
 			isa = PBXGroup;
 			children = (
+				E0740CC62543133600CAB991 /* Config.swift */,
+				E0740CCE2543160A00CAB991 /* Settings.swift */,
 				E0DD2AE62540A08300CF3827 /* AppDelegate.swift */,
 				E0DD2AE82540A08300CF3827 /* ContentView.swift */,
 				E0740CB0254217CE00CAB991 /* AudioDeviceHelper.swift */,
@@ -211,8 +217,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0DD2AE92540A08300CF3827 /* ContentView.swift in Sources */,
+				E0740CC72543133600CAB991 /* Config.swift in Sources */,
 				E0DD2AE72540A08300CF3827 /* AppDelegate.swift in Sources */,
 				E0740CB1254217CE00CAB991 /* AudioDeviceHelper.swift in Sources */,
+				E0740CCF2543160A00CAB991 /* Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
