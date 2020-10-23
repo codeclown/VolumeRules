@@ -8,50 +8,9 @@
 
 import SwiftUI
 
-struct EventFoobar: View {
-    var eventName: EventName
-    // TODO fix dropdown not updating the view
-    var audioDeviceId: String
-    @State var currentValue: Float32?
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Divider()
-            Toggle(
-                isOn: Binding<Bool>(
-                    get: {
-                        return currentValue != nil
-                    },
-                    set: {
-                        let value = $0 ? Float32(0.5) : nil
-                        setSetting(eventName, audioDeviceId, value)
-                        currentValue = value
-                    }
-                )
-            ) {
-                Text(eventLabels[eventName] ?? String(describing: eventName))
-            }
-            Slider(
-                value: Binding<Float32>(
-                    get: {
-                        return currentValue ?? 0.0
-                    },
-                    set: {
-                        let value = $0
-                        setSetting(eventName, audioDeviceId, value)
-                        currentValue = value
-                    }
-                ),
-                in: 0...1, step: 0.1
-            )
-            .disabled(currentValue == nil)
-        }
-    }
-}
-
 struct ContentView: View {
     var audioDevices = AudioDeviceHelper.listDevices()
-    @State private var selectedAudioDeviceId = ""
+    @State private var selectedAudioDeviceId = AudioDeviceHelper.getDeviceUid(AudioDeviceHelper.getActiveDeviceId())
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -62,11 +21,12 @@ struct ContentView: View {
             }
             if selectedAudioDeviceId != "" {
                 ForEach(EventName.allCases, id: \.self) { eventName in
-                    EventFoobar(
+                    EventPreferences(
                         eventName: eventName,
                         audioDeviceId: selectedAudioDeviceId,
                         currentValue: getSetting(eventName, selectedAudioDeviceId)
                     )
+                    .id("\(selectedAudioDeviceId) \(eventName)")
                 }
             }
         }
@@ -74,6 +34,48 @@ struct ContentView: View {
     }
 }
 
+struct EventPreferences: View {
+    var eventName: EventName
+    var audioDeviceId: String
+    @State var currentValue: Float32?
+    
+    private var isOn: Binding<Bool> {
+        Binding(
+            get: {
+                return currentValue != nil
+            },
+            set: {
+                let value = $0 ? Float32(0.0) : nil
+                currentValue = value
+                setSetting(eventName, audioDeviceId, value)
+            }
+        )
+    }
+    
+    private var sliderValue: Binding<Float32> {
+        Binding(
+            get: {
+                currentValue ?? 0.0
+            },
+            set: {
+                let value = $0
+                currentValue = value
+                setSetting(eventName, audioDeviceId, value)
+            }
+        )
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Divider()
+            Toggle(isOn: isOn) {
+                Text(eventLabels[eventName] ?? String(describing: eventName))
+            }
+            Slider(value: sliderValue, in: 0...1, step: 0.1)
+            .disabled(currentValue == nil)
+        }
+    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
