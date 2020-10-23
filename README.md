@@ -12,6 +12,12 @@ Screenshot of Preferences:
 
 ![](screenshots/preferences.png)
 
+## Download
+
+[**Download v0.1**](https://github.com/codeclown/VolumeRules/releases/download/v0.1/VolumeRules.app.zip) (344 KB)
+
+Tested only on Catalina.
+
 ## Troubleshooting
 
 First check the logs:
