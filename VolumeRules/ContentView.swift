@@ -14,9 +14,9 @@ struct ContentView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Picker("Audio device:", selection: $selectedAudioDeviceId) {
+            Picker(UiStrings.audioDevicePickerLabel, selection: $selectedAudioDeviceId) {
                 ForEach(audioDevices) { audioDevice in
-                    Text("\(audioDevice.name) (\(audioDevice.id)").tag(audioDevice.id)
+                    Text("\(audioDevice.name) (\(audioDevice.id))").tag(audioDevice.id)
                 }
             }
             if selectedAudioDeviceId != "" {

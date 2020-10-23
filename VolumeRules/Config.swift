@@ -22,3 +22,10 @@ let eventLabels: Dictionary<EventName, String> = [
     EventName.lockingScreen: "When screen is locked, set volume to…",
     EventName.unlockingScreen: "When screen is unlocked, set volume to…"
 ]
+
+class UiStrings {
+    static var menuItemPreferences = "Preferences"
+    static var menuItemQuit = "Quit VolumeRules"
+    static var preferencesWindowTitle = "VolumeRules Preferences"
+    static var audioDevicePickerLabel = "Audio device:"
+}

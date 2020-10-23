@@ -23,9 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func setupUi() {
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Preferences", action: #selector(openPreferences), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: UiStrings.menuItemPreferences, action: #selector(openPreferences), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit VolumeRules", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: UiStrings.menuItemQuit, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusBarItem.menu = menu
@@ -40,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             defer: false
         )
         preferencesWindow.isReleasedWhenClosed = false
-        preferencesWindow.title = "VolumeRules"
+        preferencesWindow.title = UiStrings.preferencesWindowTitle
         
         let contentView = ContentView()
         preferencesWindow.contentView = NSHostingView(rootView: contentView)

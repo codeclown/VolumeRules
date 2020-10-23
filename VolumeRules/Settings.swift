@@ -21,6 +21,10 @@ func getSetting(_ eventName: EventName, _ audioDeviceId: String) -> Float32? {
 }
 
 func setSetting(_ eventName: EventName, _ audioDeviceId: String, _ value: Float32?) {
+    let previous = getSetting(eventName, audioDeviceId)
+    if value == previous {
+        return
+    }
     let key = userDefaultsKey(eventName, audioDeviceId)
     if value == nil {
         NSLog("[setSetting] Removing value \(key)")
