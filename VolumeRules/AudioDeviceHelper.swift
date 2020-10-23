@@ -10,9 +10,6 @@ import Foundation
 import CoreAudio
 import AudioToolbox
 
-// https://chromium.googlesource.com/chromium/src/media/+/7479f0acde23267d810b8e58c07b342719d9a923/audio/mac/audio_manager_mac.cc
-// https://stackoverflow.com/questions/4575408/audioobjectgetpropertydata-to-get-a-list-of-input-devices
-
 struct AudioDevice: Identifiable {
     var id: String
     var name: String
@@ -61,10 +58,16 @@ class AudioDeviceHelper {
             )
             audioDevices.append(audioDevice)
         }
+        #if DEBUG
         audioDevices.append(AudioDevice(
-            id: "test-id",
-            name: "Test Device"
+            id: "test-id-1",
+            name: "Test Device 1"
         ))
+        audioDevices.append(AudioDevice(
+            id: "test-id-2",
+            name: "Test Device 2"
+        ))
+        #endif
         return audioDevices;
     }
     
